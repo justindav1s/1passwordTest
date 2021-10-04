@@ -63,6 +63,9 @@ spec:
         volumeMounts:
         - mountPath: /config
           name: inventory-config-vol
+        - name: securenote1
+          mountPath: "/etc/securenote1"
+          readOnly: true  
       dnsPolicy: ClusterFirst
       restartPolicy: Always
       schedulerName: default-scheduler
@@ -75,3 +78,6 @@ spec:
           defaultMode: 420
           name: inventory-config
         name: inventory-config-vol
+      - name: securenote1
+        secret:
+          secretName: secure-note1

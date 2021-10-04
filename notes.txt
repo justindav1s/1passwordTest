@@ -1,11 +1,25 @@
 https://github.com/1Password/onepassword-operator#quickstart-for-deploying-1password-connect-to-kubernetes
 
 
+pods "onepassword-connect-5484f8d4c4-" is forbidden: unable to validate against any security context constraint: [provider "anyuid": Forbidden: not usable by user or serviceaccount, provider "containerized-data-importer": Forbidden: not usable by user or serviceaccount, spec.containers[0].securityContext.runAsUser: Invalid value: 999: must be in the ranges: [1000680000, 1000689999], spec.containers[0].securityContext.capabilities.add: Invalid value: "NET_BROADCAST": capability may not be added, spec.containers[1].securityContext.runAsUser: Invalid value: 999: must be in the ranges: [1000680000, 1000689999],
+
+
+Deployment requires 
+
+securityContext:
+capabilities:
+    add:
+    - NET_BROADCAST
+    drop:
+    - all
+runAsUser: 999
+runAsGroup: 999
+allowPrivilegeEscalation: false
+
 #For OnePassword Connect
 oc adm policy add-scc-to-user privileged -z default -n 1password
 #For OnePassword Connect Operator
 oc adm policy add-scc-to-user privileged -z onepassword-connect-operator -n 1password
-
 
 helm repo add 1password https://1password.github.io/connect-helm-charts
 
@@ -19,31 +33,10 @@ helm install connect 1password/connect \
     -n 1password
 
 
-pods "onepassword-connect-5484f8d4c4-" is forbidden: unable to validate against any security context constraint: [provider "anyuid": Forbidden: not usable by user or serviceaccount, provider "containerized-data-importer": Forbidden: not usable by user or serviceaccount, spec.containers[0].securityContext.runAsUser: Invalid value: 999: must be in the ranges: [1000680000, 1000689999], spec.containers[0].securityContext.capabilities.add: Invalid value: "NET_BROADCAST": capability may not be added, spec.containers[1].securityContext.runAsUser: Invalid value: 999: must be in the ranges: [1000680000, 1000689999],
-
-
-Deployment requires 
-
-          securityContext:
-            capabilities:
-              add:
-                - NET_BROADCAST
-              drop:
-                - all
-            runAsUser: 999
-            runAsGroup: 999
-            allowPrivilegeEscalation: false
-
-#For OnePassword Connect
-oc adm policy add-scc-to-user privileged -z default -n 1password
-#For OnePassword Connect Operator
-oc adm policy add-scc-to-user privileged -z onepassword-connect-operator -n 1password
-
-
-"alpine:3.12"
-
 oc policy add-role-to-user edit system:serviceaccount:argocd:example-argocd-argocd-application-controller -n onepasswordtest
 
 onepassworditems.onepassword.com is forbidden: User "system:serviceaccount:argocd:example-argocd-argocd-application-controller" cannot create resource "onepassworditems" in API group "onepassword.com" in the namespace "onepasswordtest"
+
+oc apply -f onepassword-secret-manager-role.yaml
 
 oc policy add-role-to-user onepassword-secret-manager system:serviceaccount:argocd:example-argocd-argocd-application-controller -n onepasswordtest
