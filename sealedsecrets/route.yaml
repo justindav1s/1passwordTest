@@ -7,7 +7,7 @@ metadata:
     service: inventory
     version: v2
   name: inventory
-  namespace: sealedsecrettest
+  namespace: sealedsecretstest
 spec:
   port:
     targetPort: http
