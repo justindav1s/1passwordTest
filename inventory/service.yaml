@@ -8,7 +8,7 @@ metadata:
     service: inventory
     version: v2
   name: inventory
-  namespace: 1p-shop
+  namespace: onepasswordtest
 spec:
   ports:
   - name: http

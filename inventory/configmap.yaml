@@ -15,4 +15,4 @@ metadata:
     service: inventory
     version: v2
   name: inventory-config
-  namespace: 1p-shop
+  namespace: onepasswordtest
