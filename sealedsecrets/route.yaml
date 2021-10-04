@@ -1,0 +1,22 @@
+apiVersion: route.openshift.io/v1
+kind: Route
+metadata:
+  annotations:
+  labels:
+    app: argocd
+    service: inventory
+    version: v2
+  name: inventory
+  namespace: sealedsecrettest
+spec:
+  port:
+    targetPort: http
+  tls:
+    insecureEdgeTerminationPolicy: Redirect
+    termination: edge
+  to:
+    kind: Service
+    name: inventory
+    weight: 100
+  wildcardPolicy: None
+

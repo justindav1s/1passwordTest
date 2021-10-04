@@ -1,0 +1,21 @@
+apiVersion: v1
+kind: Service
+metadata:
+  annotations:
+  labels:
+    app: argocd
+    app.kubernetes.io/instance: inventory
+    service: inventory
+    version: v2
+  name: inventory
+  namespace: sealedsecrettest
+spec:
+  ports:
+  - name: http
+    port: 8080
+    protocol: TCP
+    targetPort: 8080
+  selector:
+    service: inventory
+  sessionAffinity: None
+  type: ClusterIP
