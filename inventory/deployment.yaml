@@ -83,4 +83,4 @@ spec:
           secretName: secure-note1
           items:
           - key: ca.cer
-            path: trust
+            path: trust/ca.cer
