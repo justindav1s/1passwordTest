@@ -82,5 +82,5 @@ spec:
         secret:
           secretName: secure-note1
           items:
-          - key: test.yaml
-            path: /etc/test.yaml
+          - key: ca.cer
+            path: trust
