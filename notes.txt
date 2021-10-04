@@ -1,0 +1,43 @@
+https://github.com/1Password/onepassword-operator#quickstart-for-deploying-1password-connect-to-kubernetes
+
+
+#For OnePassword Connect
+oc adm policy add-scc-to-user privileged -z default -n 1password
+#For OnePassword Connect Operator
+oc adm policy add-scc-to-user privileged -z onepassword-connect-operator -n 1password
+
+
+helm repo add 1password https://1password.github.io/connect-helm-charts
+
+TOKEN=$(cat ~/rh/MO/1password-token.txt)
+
+
+helm install connect 1password/connect \
+    --set-file connect.credentials=/Users/justin/rh/MO/1password-credentials.json \
+    --set operator.create=true \
+    --set operator.token.value=${TOKEN} \
+    -n 1password
+
+
+pods "onepassword-connect-5484f8d4c4-" is forbidden: unable to validate against any security context constraint: [provider "anyuid": Forbidden: not usable by user or serviceaccount, provider "containerized-data-importer": Forbidden: not usable by user or serviceaccount, spec.containers[0].securityContext.runAsUser: Invalid value: 999: must be in the ranges: [1000680000, 1000689999], spec.containers[0].securityContext.capabilities.add: Invalid value: "NET_BROADCAST": capability may not be added, spec.containers[1].securityContext.runAsUser: Invalid value: 999: must be in the ranges: [1000680000, 1000689999],
+
+
+Deployment requires 
+
+          securityContext:
+            capabilities:
+              add:
+                - NET_BROADCAST
+              drop:
+                - all
+            runAsUser: 999
+            runAsGroup: 999
+            allowPrivilegeEscalation: false
+
+#For OnePassword Connect
+oc adm policy add-scc-to-user privileged -z default -n 1password
+#For OnePassword Connect Operator
+oc adm policy add-scc-to-user privileged -z onepassword-connect-operator -n 1password
+
+
+"alpine:3.12"
