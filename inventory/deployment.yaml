@@ -64,7 +64,7 @@ spec:
         - mountPath: /config
           name: inventory-config-vol
         - name: securenote1
-          mountPath: "/etc/securenote1"
+          mountPath: "/etc"
           readOnly: true  
       dnsPolicy: ClusterFirst
       restartPolicy: Always
